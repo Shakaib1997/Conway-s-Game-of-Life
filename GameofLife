@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id="myCanvas" width="500" height="500"
+	style="border:1px solid #000000;">
+	</canvas>
+
+<script>
+//var myVar=setInterval(function(){myTimer()},1000);
+//^Timer Stuuf
+function GameBoard() {
+var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+
+counter = 0;
+var YCoor = 0;  
+
+
+while (counter<21){
+DrawLine(0,YCoor,500, YCoor);
+
+counter++;
+YCoor+=25;
+
+}
+counter = 0
+XCoor=0
+while (counter<21){
+DrawLine(XCoor,0,XCoor,500);
+
+counter++;
+XCoor+=25;
+
+}
+
+
+function DrawLine (StartXCoor, StartYCoor, EndXCoor, EndYCoor ){
+context.beginPath();
+context.moveTo(StartXCoor,StartYCoor);
+context.lineTo(EndXCoor,EndYCoor);
+context.strokeStyle = '#000000';
+context.stroke();
+
+}
+}
+function DrawRectangle(){
+    var canvas=document.getElementById("myCanvas");
+	var context=canvas.getContext("2d");
+	context.fillStyle = "deeppink";
+	
+	context.fillRect(0,0,25,25);
+	context.stroke();
+// (xstart,ystart,width, height)
+  
+
+	  
+}
+DrawRectangle();
+GameBoard();
+GameBoard();
+</script>
+
+</body>
+</html>
