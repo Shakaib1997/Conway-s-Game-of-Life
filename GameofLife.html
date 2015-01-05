@@ -3,12 +3,32 @@
 <canvas id="myCanvas" width="500" height="500"
 	style="border:1px solid #000000;">
 	</canvas>
-
+<input type="checkbox" id="demo" onkeydown="keydownFunction()">
 <script>
+function  keydownFunction(){
+console.log("Space");
+middle();
+drawCells();
+
+}
+
  var canvas = document.getElementById('myCanvas');
  var context = canvas.getContext('2d');
  var size = 25;
  var boxes = 20
+ 
+ var lifeGrid = new Array(boxes);
+
+
+for(var counter=0;counter<boxes; counter++){
+tempArray = new Array(boxes);
+for(Counter=0;Counter<boxes; Counter++){
+
+ tempArray[Counter] = 0;
+
+
+}
+
 function drawBoard() {
 
 var YCoor = 0;  
@@ -37,26 +57,15 @@ context.lineTo(EndXCoor,EndYCoor);
 context.strokeStyle = '#000000';
 context.stroke();
 }
-function drawRectangle(x,y){
+function drawRectangle(x,y,colour){
     var canvas=document.getElementById("myCanvas");
 	var context=canvas.getContext("2d");
-	context.fillStyle = "deeppink";
+	context.fillStyle = colour;
 	
-	context.fillRect(x *size,y*size,size,size);
+	context.fillRect(x *size,y*size,size-1,size-1);
 	context.stroke();	  
 }
 
-var lifeGrid = new Array(boxes);
-
-
-for(var counter=0;counter<boxes; counter++){
-tempArray = new Array(boxes);
-for(Counter=0;Counter<boxes; Counter++){
-
- tempArray[Counter] = 0;
-
-
-}
 
 
  lifeGrid[counter] = tempArray ;
@@ -84,37 +93,50 @@ lifeGrid[0][1]=1;
 lifeGrid[0][2]=1;
 lifeGrid[1][1]=1;
 
-
+lifeGrid[19][19]=1;
+lifeGrid[19][18]=1;
+lifeGrid[19][17]=1;
+lifeGrid[18][18]=1;
+    
+drawCells();
 // checks for life for all centre cells
-
+function middle(){
+var tempGrid = lifeGrid;
 for (var i = 1; i <boxes-1; i++){
 	for (var j = 1; j<boxes-1; j++){
 	liveCells=0
-	if (lifeGrid[i+1][j]==1){
+	if (tempGrid[i+1][j]==1){
 	liveCells+=1;
 	}
-	if (lifeGrid[i][j+1]==1){
+	if (tempGrid[i][j+1]==1){
 	liveCells+=1;
 	}
-	if (lifeGrid[i-1][j]==1){
+	if (tempGrid[i-1][j]==1){
 	liveCells+=1;
 	}
-	if (lifeGrid[i][j-1]==1){
+	if (tempGrid[i][j-1]==1){
 	liveCells+=1;
 	}
 
-	if (lifeGrid[i][j]==1 && liveCells<2){
-	console.log("Cells at "+i+","+j+" should be dead by under population");
+	if (tempGrid[i][j]==1 && liveCells<2){
+	//console.log("Cells at "+i+","+j+" should be dead by under population");
+	lifeGrid[i][j]= 0;
+	
 	}
-	if (lifeGrid[i][j]==1 && liveCells>3){
-	console.log("Cells at "+i+","+j+" should be dead by overcrowding");
-	}	
+	if (tempGrid[i][j]==1 && liveCells>3){
+	//console.log("Cells at "+i+","+j+" should be dead by overcrowding");
+	lifeGrid[i][j]= 0;
+	}
+	if (tempGrid[i][j]==0 && liveCells==3 )
+	lifeGrid[i][j] = 1;	
 	}
 	
 	
 }
-
-// checks top cells (not the corners) 
+console.log(lifeGrid[8][6])
+}
+// checks top cells (not the corners)
+/* 
 for (var i=1;i<boxes-1; i++){
 	liveCells=0
 	
@@ -132,7 +154,9 @@ for (var i=1;i<boxes-1; i++){
 	}	
 
 }
+*/
 // checks for life in bottom cells(not the corners)
+/*
 for (var i=1;i<boxes-1; i++){
 	liveCells=0
 	
@@ -149,8 +173,9 @@ for (var i=1;i<boxes-1; i++){
 	console.log("Cells at "+i+",19 should be dead by under population");
 }
 }
-	
+*/	
 // checks for life on the left side
+/*
 for (var i=1;i<boxes-1; i++){
 	liveCells=0
 	
@@ -167,17 +192,44 @@ for (var i=1;i<boxes-1; i++){
 	console.log("Cells at 0,"+i+" should be dead by under population");
 }
 }
-//Draws in the live cells
+*/
+//checks for life on the right side
+/*
+for (var i=1;i<boxes-1; i++){
+	liveCells=0
+	
+	if (lifeGrid[19][i-1]==1){
+	liveCells+=1;
+	}
+	if (lifeGrid[19][i+1]==1){
+	liveCells+=1;
+	}
+	if (lifeGrid[18][i]==1){
+	liveCells+=1;
+	}
+	if (lifeGrid[19][i]==1 && liveCells<2){
+	console.log("Cells at 19,"+i+" should be dead by under population");
+}
+}
+*/
 
+//Draws in the live cells
+function drawCells(){
 for(var i =0; i<boxes; i++){
  for(var j =0; j<boxes; j++){
-  if(lifeGrid[i][j]==1)
-   drawRectangle(i,j);
+  if(lifeGrid[i][j]==1){
+   drawRectangle(i,j,"deeppink");
+   
+   }else{
+   drawRectangle(i,j,"white");
+   }
 }
 }
-
+}
 
 drawBoard();
+
+
 </script>
 
 </body>
