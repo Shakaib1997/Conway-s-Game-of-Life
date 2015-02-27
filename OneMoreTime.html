@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<body>
+
+<canvas id="myCanvas" width="500" height="500"
+	style="border:1px solid #000000;">
+</canvas>
+<input type="checkbox" id="demo" onkeydown="keydownFunction()">
+<script>
+// global variables var canvas = document.getElementById('myCanvas');
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+var size = 25;
+var boxes = 22;
+var lifeGrid = new Array(boxes);
+
+
+
+// creation of a 2 d array
+//TODO make this into a function to create any 2d array 
+for (var counter = 0;counter<boxes;counter++){
+	 lifeGrid[counter] = new Array(boxes);
+}
+
+
+for (var counter_x = 0;counter<boxes;counter_x++){
+	 
+	 
+	 for (var counter_y = 0;counter_y<boxes;counter_y++){
+		lifeGrid[counter_x][counter_y] = 0;
+	}
+	
+	
+}
+// calls the checking functions to continue the game 
+function  keydownFunction(){
+	
+	
+	lifeGrid=nextGen();
+	drawCells();
+}
+
+//Calls upon drawLine and gives it coordinates so it can draw the game board
+function drawBoard() {
+	var yCoor = 0;  
+		//prints the grid
+		for (var counter=0; counter<boxes+1; counter++){
+			drawLine(0,yCoor,500, yCoor);
+			yCoor+=size;
+		}	
+	var xCoor=0;
+		for (var counter=0; counter<boxes+1; counter++){
+			drawLine(xCoor,0,xCoor,500);
+			xCoor+=size;
+		}
+}
+drawBoard();
+
+
+// given the start and end coordinates of the lines when this function is called it can create a line
+function drawLine (startXCoor, startYCoor, endXCoor, endYCoor ){
+	context.beginPath();
+	context.moveTo(startXCoor,startYCoor);
+	context.lineTo(endXCoor,endYCoor);
+	context.strokeStyle = '#000000';
+	context.stroke();
+}
+// Given the coordinates of the square and the desired colour it can draw a square on the canvas
+function drawRectangle(x,y,colour){
+    var canvas=document.getElementById("myCanvas");
+	var context=canvas.getContext("2d");
+	context.fillStyle = colour;
+	
+	context.fillRect(x *size,y*size,size-1,size-1);
+	context.stroke();	  
+}
+// draws rectangle given the coordinate of the boxes
+/* 
+function drawRectangle(x,y,colour){
+    var canvas=document.getElementById("myCanvas");
+	var context=canvas.getContext("2d");
+	context.fillStyle = colour;
+	
+	context.fillRect(x *size,y*size,size-1,size-1);
+	context.stroke();	  
+}*/
+// given the coordinate of the live cell it calls upon draw rectangle to draw the cell
+// live cells are magenta and dead cells are white, 1 is alive, 0 is dead  
+function drawCells(){
+for(var i =1; i<boxes; i++){
+ for(var j =1; j<boxes; j++){
+  if(lifeGrid[i][j]==1){
+   drawRectangle(i-1,j-1,"deeppink");
+   
+   }else{
+   drawRectangle(i-1,j-1,"white");
+   }
+}
+}
+}
+
+lifeGrid[8][6]=1;
+lifeGrid[8][7]=1;
+lifeGrid[8][5]=1;
+lifeGrid[7][6]=1;
+lifeGrid[9][6]=1;
+
+lifeGrid[8][1]=1;
+lifeGrid[9][1]=1;
+lifeGrid[7][1]=1;
+lifeGrid[8][2]=1;
+
+lifeGrid[8][20]=1;
+lifeGrid[9][20]=1;
+lifeGrid[7][20]=1;
+lifeGrid[8][19]=1;
+
+lifeGrid[1][1]=1;
+lifeGrid[1][2]=1;
+lifeGrid[1][3]=1;
+lifeGrid[2][2]=1;
+
+lifeGrid[20][20]=1;
+lifeGrid[20][19]=1;
+lifeGrid[20][18]=1;
+lifeGrid[19][20]=1;
+
+drawCells();
+// checks from 1,1 to 19,19 for how many live cells are around each cell 
+function midCheck(i,j){
+			// a variable to hold the number of live cells are around each cell
+			var liveCells = 0;
+
+
+			if(lifeGrid[i][j-1]==1){
+				liveCells =liveCells+1;
+		
+			}
+			
+			if(lifeGrid[i-1][j-1]==1){
+				liveCells =liveCells+1;
+		
+			}
+			
+			if(lifeGrid[i-1][j]==1){
+				liveCells =liveCells+1;
+					
+			}
+			if(lifeGrid[i+1][j-1]==1){
+				liveCells =liveCells+1;
+				
+			}
+			if(lifeGrid[i+1][j]==1){
+				liveCells =liveCells+1;
+					
+			}
+			if(lifeGrid[i+1][j+1]==1){
+				liveCells =liveCells+1;
+				
+			}
+			if(lifeGrid[i][j+1]==1){
+				liveCells =liveCells+1;
+				
+			}
+			if(lifeGrid[i-1][j+1]==1){
+				liveCells =liveCells+1;
+
+		
+			}
+
+			//if(lifeGrid[i][j]==1){
+				//console.log(i+" , " + j + " live cells:  " + liveCells);
+			//}
+
+
+		return liveCells;
+		
+}
+//This method creates a new array that is the next generation of the old array
+
+function nextGen(){
+	var checkGrid = new Array(boxes);
+	for (var counter = 0;counter<boxes;counter++){
+		 checkGrid[counter] = new Array(boxes);
+	}
+	var firstCoor = 0;
+	for (var counter = 0;counter<boxes;counter++){
+		 
+		 
+		 
+		for (var counterz = 0;counterz<boxes;counterz++){
+			checkGrid[firstCoor][counterz] = 0;
+		}
+		firstCoor+=1;
+	}
+	checkGrid = lifeGrid;
+	
+		for(j=1;j<boxes-1;j++){
+			for(i=1;i<boxes-1;i++){
+				var liveCells = midCheck(i,j);
+				if(liveCells == 3 && lifeGrid[i][j]==0 ){
+					console.log(i+","+j+" should come back to life");
+					//checkGrid[i][j] = 1;
+				}
+				
+				if(liveCells >3 && lifeGrid[i][j]==1 ){
+					console.log(i+","+j+" should die from overcrowding");
+					//checkGrid[i][j]= 0;
+				}
+				
+				if(liveCells<2 && lifeGrid[i][j] == 1){
+					console.log(i+","+j+" should die from underpopulation");
+					//checkGrid[i][j] = 0;
+				
+				}
+				if (liveCells == 2&& lifeGrid[i][j]==1||liveCells==3&&lifeGrid[i][j]==1){
+					console.log(i+","+j+" should stay alive for the next generation");
+					//checkGrid[i][j] = 1;
+				
+				}
+				
+
+			}
+		}
+		return checkGrid;
+}
+
+</script>
+
+</body>
+</html>
