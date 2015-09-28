@@ -1,6 +1,6 @@
 ## Conway-s-Game-of-Life
 ### Online Version
-[My version of Conways Game of Life can be found here](shakaibsgameoflife.droppages.com)
+[My version of Conways Game of Life can be found here](http://shakaibsgameoflife.droppages.com)
 ### Rules
 1. Any live cell with fewer than two live neighbours dies, as if caused by under-population.
 2. Any live cell with two or three live neighbours lives on to the next generation.
